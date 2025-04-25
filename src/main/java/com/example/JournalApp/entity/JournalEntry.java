@@ -1,14 +1,18 @@
 package com.example.JournalApp.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+
+import java.time.LocalDateTime;
 
 @Entity(name = "journal")
 public class JournalEntry {
 
+
     @Id
     @Column(name = "id")
-    private Long id;
+    private String id;
 
     @NotNull
     @Column(name = "title", nullable = false, unique = true)
@@ -17,19 +21,48 @@ public class JournalEntry {
     @Column(name = "content", nullable = false)
     private String content;
 
+    @ManyToOne
+    @JoinColumn(name = "userId", nullable = false) // match this with the @Column name in User
+    @JsonBackReference
+    private User user;
+
+
+    @Column(name = "date")
+    private LocalDateTime date;
+
+
     public JournalEntry(){};
 
-    public JournalEntry(Long id, String title, String content) {
+    public JournalEntry(String id, String title, String content, User user) {
         this.id = id;
         this.title = title;
         this.content = content;
+        this.user = user;
     }
 
-    public Long getId() {
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
